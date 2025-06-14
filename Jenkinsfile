@@ -16,36 +16,33 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                bat 'npm install'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t ${IMAGE_NAME} ."
+                bat "docker build -t %IMAGE_NAME% ."
             }
         }
 
         stage('Stop Existing Container (if any)') {
             steps {
-                script {
-                    // Stops and removes the container if it exists
-                    sh "docker stop ${CONTAINER_NAME} || true"
-                    sh "docker rm ${CONTAINER_NAME} || true"
-                }
+                bat "docker stop %CONTAINER_NAME% || exit 0"
+                bat "docker rm %CONTAINER_NAME% || exit 0"
             }
         }
 
         stage('Run Docker Container') {
             steps {
-                sh "docker run -d -p ${PORT}:${PORT} --name ${CONTAINER_NAME} ${IMAGE_NAME}"
+                bat "docker run -d -p %PORT%:3000 --name %CONTAINER_NAME% %IMAGE_NAME%"
             }
         }
     }
 
     post {
         success {
-            echo '✅ Build and deployment successful!'
+            echo '✅ Application deployed successfully!'
         }
         failure {
             echo '❌ Build or deployment failed!'
