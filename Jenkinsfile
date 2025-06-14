@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Clone GitHub Repo') {
             steps {
-                git 'https://github.com/SuryaMVN07/node-ci-demo.git'
+                git branch: 'main', url :'https://github.com/SuryaMVN07/node-ci-demo.git'
             }
         }
         stage('Install Dependencies') {
